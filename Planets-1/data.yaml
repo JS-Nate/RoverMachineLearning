@@ -1,0 +1,13 @@
+train: C:/Users/natt4/PycharmProjects/RoverMachineLearning/Planets-1/train/images
+val: C:/Users/natt4/PycharmProjects/RoverMachineLearning/Planets-1/valid/images
+test: C:/Users/natt4/PycharmProjects/RoverMachineLearning/Planets-1/test/images
+
+nc: 7
+names: ['Asteroids', 'Black Hole', 'Earth', 'Jupiter', 'Saturn', 'Sun', 'Venus']
+
+roboflow:
+  workspace: ibm-space-rover
+  project: planets-extlk
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ibm-space-rover/planets-extlk/dataset/1
