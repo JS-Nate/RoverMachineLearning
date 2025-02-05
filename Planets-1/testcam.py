@@ -2,6 +2,7 @@ import cv2
 from ultralytics import YOLO
 import os
 import numpy as np
+import math
 
 # Ensure we are working with the correct directory
 script_dir = os.path.dirname(os.path.realpath(__file__))  # Get directory of the script
@@ -73,29 +74,37 @@ if not top_object:
 # Draw a line from the 'bottom' object to the 'top' object
 cv2.line(annotated_image, bottom_object, top_object, (0, 255, 255), 2)  # Yellow line
 
-# Calculate the angle between the 'bottom' and 'top' objects
+# Calculate direction based on relative positions of bottom and top objects
 dx = top_object[0] - bottom_object[0]  # Difference in x
 dy = top_object[1] - bottom_object[1]  # Difference in y
+
+# Determine the direction based on the position of 'top' relative to 'bottom'
+if abs(dy) > abs(dx):  # North or South direction
+    if dy < 0:
+        direction = "North"  # Top is above Bottom
+    else:
+        direction = "South"  # Bottom is below Top
+else:  # East or West direction
+    if dx > 0:
+        direction = "East"  # Top is to the right of Bottom
+    else:
+        direction = "West"  # Top is to the left of Bottom
+
+# Prepare the text to display the direction on the image
+direction_text = f"Direction: {direction}"
+
+# Display the direction on the image
+cv2.putText(annotated_image, direction_text, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)  # Blue text for direction
+
+# Calculate the angle (in degrees) of the line between 'bottom' and 'top'
 angle_rad = np.arctan2(dy, dx)  # Angle in radians
+angle_deg = np.degrees(angle_rad)  # Convert angle to degrees
 
-# Convert the angle from radians to degrees
-angle_deg = np.degrees(angle_rad)
+# Prepare the text to display the angle on the image
+angle_text = f"Angle: {angle_deg:.2f}°"
 
-# Print the angle
-print(f"Angle between bottom and top: {angle_deg:.2f} degrees")
-
-# Determine the direction based on the angle
-if -45 <= angle_deg < 45:
-    direction = "East"  # East direction
-elif 45 <= angle_deg < 135:
-    direction = "North"  # North direction
-elif -135 <= angle_deg < -45:
-    direction = "South"  # South direction
-else:
-    direction = "West"  # West direction
-
-# Print the direction
-print(f"The line from 'bottom' to 'top' is pointing: {direction}")
+# Display the angle on the image
+cv2.putText(annotated_image, angle_text, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)  # Blue text for angle
 
 # Draw bounding boxes and labels for the 'bottom' and 'top'
 for i, box in enumerate(boxes):
