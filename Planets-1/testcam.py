@@ -2,35 +2,29 @@ import cv2
 from ultralytics import YOLO
 
 # Load the YOLO model
-model = YOLO("C:/Users/natt4/PycharmProjects/RoverMachineLearning/runs/detect/train3/weights/best.pt")
+model = YOLO("C:/Users/natt4/OneDrive/Documents/GitHub/RoverMachineLearning/Planets-1/best.pt")
 
-# Open webcam (0 is the default camera)
-cap = cv2.VideoCapture(0)
+# Read the image file
+image = cv2.imread("C:/Users/natt4/OneDrive/Documents/GitHub/RoverMachineLearning/Planets-1/IMG_1190.jpg")
 
-# Check if the webcam is opened correctly
-if not cap.isOpened():
-    print("Error: Could not open webcam.")
-    exit()
+# Check if the image file is read correctly
+if image is None:
+    print("Error: Could not read image file.")
+    exit()  # Exit the script
 
-while True:
-    # Read a frame from the webcam
-    ret, frame = cap.read()
-    if not ret:
-        break
+# Perform detection on the image
+results = model.predict(image)
 
-    # Perform detection on the frame
-    results = model.predict(frame)
+# Annotate image with detection results
+annotated_image = results[0].plot()
 
-    # Annotate frame with detection results
-    annotated_frame = results[0].plot()
+# Resize the window
+cv2.namedWindow("YOLO Detection", cv2.WINDOW_NORMAL)
+# cv2.resizeWindow("YOLO Detection", 1280, 720)  # Set the desired window size
 
-    # Display the frame with detections
-    cv2.imshow("YOLO Detection", annotated_frame)
+# Display the image with detections
+cv2.imshow("YOLO Detection", annotated_image)
 
-    # Exit on pressing 'q'
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-# Release the resources
-cap.release()
+# Wait for a key press and close the window
+cv2.waitKey(0)
 cv2.destroyAllWindows()

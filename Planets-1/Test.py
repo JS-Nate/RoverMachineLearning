@@ -2,10 +2,10 @@ import cv2
 from ultralytics import YOLO
 
 # Load the YOLO model
-model = YOLO("C:/Users/natt4/PycharmProjects/RoverMachineLearning/runs/detect/train3/weights/best.pt")
+model = YOLO("best.pt")
 
 # Load video file
-cap = cv2.VideoCapture("C:/Users/natt4/PycharmProjects/RoverMachineLearning/test.mp4")
+cap = cv2.VideoCapture(0)
 
 # Define codec and output video writer for saving detections
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
